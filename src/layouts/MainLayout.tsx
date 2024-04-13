@@ -1,11 +1,13 @@
-import Header from './components/Header'
-import Footer from './components/Footer'
+import Header from '@/components/common/Header'
+import Footer from '@/components/common/Footer'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
     return (
-        <main>
+        <main className=' flex-1 flex flex-col' >
             <Header />
-            {children}
+            <div className=' flex-1  container'>
+                {children}
+            </div>
             <Footer />
         </main>
     )

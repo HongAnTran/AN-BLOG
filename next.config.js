@@ -1,4 +1,19 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  reactStrictMode: false,
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
 
-module.exports = nextConfig
+  images: {
+    remotePatterns: [
+      {
+        hostname: "**",
+      },
+    ],
+  },
+};
+
+module.exports = nextConfig;
