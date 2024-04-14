@@ -1,19 +1,23 @@
-FROM node:latest
+# Sử dụng một image node.js chứa npm để cài đặt và xây dựng ứng dụng
+FROM node:alpine AS builder
 
-# Tạo thư mục làm việc và di chuyển vào đó
+# Thiết lập thư mục làm việc
 WORKDIR /app
 
-# Sao chép package.json và package-lock.json nếu có
-COPY package*.json ./
-
-# Cài đặt các gói npm
-RUN npm install
-
-# Sao chép toàn bộ mã nguồn ứng dụng vào thư mục làm việc
+# Sao chép tất cả các tệp từ thư mục hiện tại vào image
 COPY . .
 
-# Mở cổng 3000 để ứng dụng có thể chạy trên cổng này
-EXPOSE 3000
+# Cài đặt các gói phụ thuộc và xây dựng ứng dụng
+RUN npm install
+RUN npm run build
 
-# Khởi chạy ứng dụng
-CMD ["npm", "run", "start"]
+# Sử dụng image nginx nhỏ để chứa ứng dụng đã xây dựng
+FROM nginx:alpine
+
+# Sao chép tệp tĩnh đã xây dựng từ image trước
+COPY --from=builder /app/out /usr/share/nginx/html
+
+# Mở cổng 80 để có thể truy cập vào ứng dụng qua HTTP
+EXPOSE 80
+
+# CMD ["nginx", "-g", "daemon off;"]
